@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#
+# Convert a Markdown file to HTML.
+#
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/} in_file out_file
+Convert a Markdown file to HTML.
+
+If out_file is not given, output will go to in_file.html (with any previous
+extension removed).
+
+  Examples:
+    ${0##*/} document.md output.html    Output to output.html
+    ${0##*/} doc2.md                    Output to doc2.html
+    ${0##*/} markdown-file              Output to markdown-file.md
+    ${0##*/} many.extensions.md         Output to many.extensions.html
+
+  Options:
+    -h          display this help message
+EOF
+}
+
+while getopts "h" opt; do
+    case $opt in
+        h) # display usage message
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+
+if [ -z "$1" ]; then
+	echo "error: no arguments supplied"
+    usage
+	exit 1
+fi
+
+if ! [ -f "$1" ]; then
+	echo "error: argument 1 is not a regular file: $1"
+    usage
+	exit 1
+fi
+
+
+if [ $2 ]; then
+	outfile="$2"
+else
+	outfile="${1%.*}.html"
+fi
+
+# this works for both discount (a Markdown implementation in C) and original
+# Perl Markdown, but I don't like it as much.
+markdown "$1" > "$outfile"
+
+# note - this expects discount, which allows you to specify an output file with
+# -o. it might not work for Perl Markdown.
+#markdown "$1" -o "$outfile"
