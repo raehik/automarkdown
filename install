@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#
+# Sets some useful symbolic links for automarkdown.
+#
+
+ln -s "$PWD/automarkdown" "$HOME/bin"
+ln -s "$HOME/bin/automarkdown" "$HOME/bin/md"
